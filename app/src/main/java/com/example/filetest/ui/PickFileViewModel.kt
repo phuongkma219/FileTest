@@ -24,7 +24,7 @@ class PickFileViewModel:ViewModel() {
     val isDetailMode: LiveData<Boolean> = Transformations.map(pickFileModel) {
         if (it.loadingStatus== LoadingStatus.Success) {
             val pickFileModel = (pickFileModel.value as DataResponse.DataSuccess).body
-            pickFileModel.fileModelDataType == FileModelDataType.LoadDetailFolder
+            pickFileModel.fileModelDataType == FileModelDataType.LoadFolder
         } else {
             false
         }
@@ -33,8 +33,13 @@ class PickFileViewModel:ViewModel() {
     val title: LiveData<String> = Transformations.map(pickFileModel) {
         if (pickFileModel.value!!.loadingStatus == LoadingStatus.Success) {
             val pickFileModel = (pickFileModel.value as DataResponse.DataSuccess).body
-            if ( pickFileModel.fileModelDataType == FileModelDataType.LoadDetailFolder) {
-                pickFileModel.data[0].name
+            if ( pickFileModel.fileModelDataType == FileModelDataType.LoadFolder) {
+               if(File( pickFileModel.data[0].path).parentFile.name =="0"){
+                   "File"
+               }
+                else{
+                   File( pickFileModel.data[0].path).parentFile.name
+               }
             } else {
                 "File"
             }
@@ -43,7 +48,6 @@ class PickFileViewModel:ViewModel() {
             "File"
         }
     }
-
 
 
     fun getALlFile(path:String){
@@ -55,6 +59,10 @@ class PickFileViewModel:ViewModel() {
                     if (File(i.path).isDirectory){
                         arr.add(FileModel(i.name,i.path))
                         pickFileModel.value = DataResponse.DataSuccess(PickFileModel(FileModelDataType.LoadFolder,arr))
+                    }
+                    else{
+                        pickFileModel.value = DataResponse.DataSuccess(PickFileModel(FileModelDataType.LoadDetailFolder,arr))
+
                     }
 
                 }

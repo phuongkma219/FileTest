@@ -1,33 +1,39 @@
 package com.example.filetest.ui
 
+import android.content.Intent
 import android.os.Environment
-import android.util.Log
+import android.os.Parcelable
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.baseproject.data.api.response.DataResponse
 import com.example.baseproject.data.api.response.LoadingStatus
 import com.example.baseproject.ui.base.AbsBaseFragment
-import com.example.baseproject.ui.base.BaseWithVMFragment
 import com.example.filetest.R
-import com.example.filetest.data.model.PickFileModel
+import com.example.filetest.data.model.FileModel
+import com.example.filetest.data.model.FileModelDataType
 import com.example.filetest.databinding.PickFileFragmentBinding
 
-class PickFileFragment: AbsBaseFragment<PickFileFragmentBinding>() {
-    private val mAdapter = FileAdapter()
-    private lateinit var mViewModel : PickFileViewModel
-    companion object{
+
+class PickFileFragment : AbsBaseFragment<PickFileFragmentBinding>(), FileAdapter.ListenerClickItem {
+    private lateinit var mAdapter : FileAdapter
+    private lateinit var mViewModel: PickFileViewModel
+
+    var folderState: Parcelable? = null
+
+    companion object {
         const val COLUMNS = 2
     }
+
     override fun getLayout(): Int {
         return R.layout.pick_file_fragment
     }
 
     override fun initView() {
+        mAdapter =  FileAdapter(requireContext(), this)
         initViewModel()
         binding.apply {
             recycleView.layoutManager = GridLayoutManager(
                 requireActivity(),
-               COLUMNS
+                COLUMNS
             )
             recycleView.setHasFixedSize(true)
             recycleView.adapter = mAdapter
@@ -36,12 +42,36 @@ class PickFileFragment: AbsBaseFragment<PickFileFragmentBinding>() {
     }
 
     fun initViewModel() {
-         mViewModel = PickFileViewModel()
+        mViewModel = PickFileViewModel()
         mViewModel.getALlFile(Environment.getExternalStorageDirectory().getPath())
-        mViewModel.pickFileModel.observe(viewLifecycleOwner){
-            if (it.loadingStatus == LoadingStatus.Success){
-                mAdapter.update( (it as DataResponse.DataSuccess).body)
+        mViewModel.pickFileModel.observe(viewLifecycleOwner) {
+            if (it.loadingStatus == LoadingStatus.Success) {
+               val body = (it as DataResponse.DataSuccess).body
+                if (body.fileModelDataType == FileModelDataType.LoadFolder){
+                    binding.recycleView.layoutManager!!.onRestoreInstanceState(folderState)
+
+                }
+                mAdapter.update(body)
+
             }
         }
+    }
+
+    override fun onClickFileItem(
+        position: Int,
+        fileModelDataType: FileModelDataType,
+        fileModel: FileModel
+    ) {
+        if (fileModelDataType == FileModelDataType.LoadFolder){
+            folderState =  binding.recycleView.layoutManager!!.onSaveInstanceState()
+            mViewModel.getALlFile(fileModel.path)
+        }
+        else{
+            val photoPickerIntent = Intent(Intent.ACTION_PICK)
+            photoPickerIntent.type = "image/*"
+            startActivityForResult(photoPickerIntent, 123)
+        }
+
+
     }
 }

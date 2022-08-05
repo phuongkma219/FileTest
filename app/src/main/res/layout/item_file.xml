@@ -11,27 +11,26 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/const_root"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_icon_folder"
+            android:id="@+id/iv_icon_file"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="@dimen/dp_12"
             android:layout_marginStart="@dimen/dp_12"
-            setImage="@{model}"
+            android:src="@drawable/ic_baseline_insert_drive_file_24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_name"
             android:text="@{model.name}"
-            app:layout_constraintBottom_toBottomOf="@id/iv_icon_folder"
-            app:layout_constraintTop_toTopOf="@id/iv_icon_folder"
+            app:layout_constraintBottom_toBottomOf="@id/iv_icon_file"
+            app:layout_constraintTop_toTopOf="@id/iv_icon_file"
             android:layout_marginTop="@dimen/dp_4"
-            app:layout_constraintStart_toEndOf="@id/iv_icon_folder"
+            app:layout_constraintStart_toEndOf="@id/iv_icon_file"
             android:textAppearance="?textAppearanceBody2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

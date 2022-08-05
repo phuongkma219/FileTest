@@ -22,10 +22,12 @@ object Utils {
     fun gellAllFF(path:String):MutableList<FileModel>{
         val f = File(path)
         val arrayF = mutableListOf<FileModel>()
-        val files: Array<File> = f.listFiles()
-        for (inFile in files) {
-                arrayF.add(FileModel(inFile.name,inFile.absolutePath))
-        }
+        val files: Array<File> = if (f.listFiles() != null) f.listFiles() else arrayOf()
+       if (files.isNotEmpty()){
+           for (inFile in files) {
+               arrayF.add(FileModel(inFile.name,inFile.absolutePath))
+           }
+       }
         return arrayF
     }
     var STORAGE_PERMISSION_UNDER_STORAGE_SCOPE = arrayOf(
