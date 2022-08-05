@@ -4,8 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Test/FileTest/app/src/main/res/drawable/ic_baseline_chevron_right_24.xml" value="0.1885" />
+        <entry key="..\:/Test/FileTest/app/src/main/res/drawable/ic_baseline_folder_24.xml" value="0.191" />
         <entry key="..\:/Test/FileTest/app/src/main/res/layout/activity_main.xml" value="0.3619791666666667" />
         <entry key="..\:/Test/FileTest/app/src/main/res/layout/home_fragment.xml" value="0.3609375" />
+        <entry key="..\:/Test/FileTest/app/src/main/res/layout/item_folder.xml" value="0.365625" />
         <entry key="..\:/Test/FileTest/app/src/main/res/layout/pick_file_fragment.xml" value="0.3609375" />
       </map>
     </option>
